@@ -15,28 +15,33 @@
                                     <i class="material-icons">more_vert</i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="../organisasi/">Daftar Organisasi</a></li>
+                                    <li><a href="../arsip/">Daftar Arsip</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                     <div class="body">
-                        <form id="form_validation" method="POST">
+                        <form id="form_validation" action="../arsip/upload" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                             <h2 class="card-inside-title">File</h2>
                             <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="file" class="form-control" />
+                                            <input type="file" id="userfile" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <select class="form-control show-tick">
                                         <option value="">-- Pilih Tipe Arsip --</option>
-                                        <option value="10">Surat Keputusan</option>
-                                        <option value="20">Ijazah</option>
-                                        <option value="30">Panduan</option>
+                                        <?php 
+                                        foreach($tipe_arsip as $row)
+                                        {
+                                        ?>
+                                        <option value="<?php echo $row->kategori_id ?>"><?php echo $row->nama ?></option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -54,19 +59,14 @@
                                         <b>Unit Kerja</b>
                                     </p>
                                     <select class="form-control show-tick" multiple  data-live-search="true">
-                                        <option value="S1-Matematika">S1 Matematika</option>
-                                        <option value="S1-Kimia">S1 Kimia</option>
-                                        <option value="S1-Biologi">S1 Biologi</option>
-                                        <option value="S1-Fisika">S1 Fisika</option>
-                                        <option value="S1-Farmasi">S1 Farmasi</option>
-                                        <option value="S1 Ilmu Komputer">S1 Ilmu Komputer</option>
-                                        <option value="D3 Anfarma">D3 Anfarma</option>
-                                        <option value="Apoteker">Apoteker</option>
-                                        <option value="Tata Usaha">Tata Usaha</option>
-                                        <option value="Kepegawaian">Kepegawaian</option>
-                                        <option value="Keuangan">Keuangan</option>
-                                        <option value="Akademik">Akademik</option>
-                                        <option value="Umum">Umum</option>
+                                        <?php 
+                                        foreach($unit_kerja as $row)
+                                        {
+                                        ?>
+                                        <option value="<?php echo $row->bidang_id ?>"><?php echo $row->nama ?></option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>

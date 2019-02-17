@@ -25,7 +25,10 @@ class Arsip extends CI_Controller {
 		$this->load->helper('url'); 
 		$this->load->helper('text');
 		$this->load->helper('date');
+		$this->load->helper('form');
 		$this->load->model('ArsipModel');
+		$this->load->model('TipeArsipModel');
+		$this->load->model('OrganisasiModel');
 	}
 
 	public function index()
@@ -41,8 +44,27 @@ class Arsip extends CI_Controller {
     
     public function add()
 	{
+		$result['tipe_arsip']=$this->TipeArsipModel->list();
+		$result['unit_kerja']=$this->OrganisasiModel->list();
+
 		$this->load->view('templates/header');
-		$this->load->view('arsip/arsip_add');
+		$this->load->view('arsip/arsip_add', $result);
+		$this->load->view('templates/footer');
+	}
+
+	public function upload()
+	{
+		$config['upload_path'] = './uploads/pdf/';
+		$this->load->library('upload', $config);
+		if ( ! $this->upload->do_upload('userfile'))
+        {
+		}
+
+		$result['tipe_arsip']=$this->TipeArsipModel->list();
+		$result['unit_kerja']=$this->OrganisasiModel->list();
+
+		$this->load->view('templates/header');
+		$this->load->view('arsip/arsip_add', $result);
 		$this->load->view('templates/footer');
 	}
 

@@ -52,28 +52,7 @@
             </div>
         </div>
         <!-- #END# Widgets -->
-        <!-- CPU Usage -->
-        <div class="row clearfix">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="card">
-                    <div class="header">
-                        <div class="row clearfix">
-                            <div class="col-xs-12 col-sm-6">
-                                <h2>Statistik</h2>
-                            </div>
-                            <div class="col-xs-12 col-sm-6 align-right">
-                                
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="body">
-                        <div id="real_time_chart" class="dashboard-flot-chart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- #END# CPU Usage -->
+
         <div class="row clearfix">
             <!-- Visitors -->
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -181,6 +160,30 @@
             </div>
             <!-- #END# Answered Tickets -->
         </div>
+
+        <!-- CPU Usage -->
+        <div class="row clearfix">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="header">
+                        <div class="row clearfix">
+                            <div class="col-xs-12 col-sm-6">
+                                <h2>Statistik</h2>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 align-right">
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="body">
+                        <div id="real_time_chart" class="dashboard-flot-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# CPU Usage -->
+        
 
         <div class="row clearfix">
         </div>
