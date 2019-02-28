@@ -226,7 +226,7 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-                <ul class="list">
+            <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
                         <a href="<?php echo base_url(); ?>">
@@ -235,15 +235,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo base_url(); ?>index.php/organisasi">
-                            <i class="material-icons">group_work</i>
-                            <span>Unit Kerja</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">recent_actors</i>
-                            <span>Role & User</span>
+                            <i class="material-icons">apps</i>
+                            <span>Manajemen & Setting Aplikasi</span>
                         </a>
                         <ul class="ml-menu">
                             <li>
@@ -251,6 +245,15 @@
                             </li>
                             <li>
                                 <a href="<?php echo base_url(); ?>index.php/user">User</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>index.php/organisasi">Unit Kerja</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>index.php/tipe_arsip/">Tipe Arsip</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>index.php/template_task">Template Folder</a>
                             </li>
                         </ul>
                     </li>
@@ -261,27 +264,13 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="<?php echo base_url(); ?>index.php/tipe_arsip/">Tipe Arsip</a>
-                            </li>
-                            <li>
                                 <a href="<?php echo base_url(); ?>index.php/arsip/add">Unggah Arsip</a>
                             </li>
                             <li>
                                 <a href="<?php echo base_url(); ?>index.php/arsip">Daftar Arsip</a>
                             </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">assignment_turned_in</i>
-                            <span>Task</span>
-                        </a>
-                        <ul class="ml-menu">
-                        <li>
-                                <a href="<?php echo base_url(); ?>index.php/template_task">Template Task</a>
-                            </li>
                             <li>
-                                <a href="<?php echo base_url(); ?>index.php/task">Daftar Task</a>
+                                <a href="<?php echo base_url(); ?>index.php/task">Folder</a>
                             </li>
                         </ul>
                     </li>
