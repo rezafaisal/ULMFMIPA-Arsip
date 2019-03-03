@@ -35,7 +35,7 @@ class Arsip extends CI_Controller {
 	{
 		$keyword    =   $this->input->post('InputKeyword');
 
-		$result['data']=$this->ArsipModel->list($keyword);
+		$result['data']=$this->ArsipModel->list_($keyword);
 		
 		$this->load->view('templates/header_list');
 		$this->load->view('arsip/arsip_list', $result);

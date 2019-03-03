@@ -1,13 +1,15 @@
 <?php
-class ArsipModel extends CI_Model 
+class ArsipModel extends MY_Model 
 {
+    protected $table = "arsip";
+    protected $pK = "id";
         function save($name,$email,$mobile)
         {
                 $query="insert into users values('','$name','$email','$mobile')";
                 $this->db->query($query);
         }
 
-        function list($keyword)
+        function list_($keyword)
         {
                 if (!empty($keyword)){
                         $this->db->or_like('isi', $keyword);
@@ -24,4 +26,9 @@ class ArsipModel extends CI_Model
 
                 return $query->result();
         }
+        
+    public function existAttr($field, $value){
+        $this->db->where($field,$value);
+        return !($this->db->count_all_results($this->table) > 0);
+    }
 }
