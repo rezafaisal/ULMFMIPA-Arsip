@@ -324,6 +324,12 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="">
+                        <a href="<?php echo site_url("login/keluar"); ?>">
+                            <i class="material-icons">input</i>
+                            <span>Log Out</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <!-- #Menu -->

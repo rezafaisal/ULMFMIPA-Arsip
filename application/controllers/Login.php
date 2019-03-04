@@ -40,12 +40,8 @@ class login extends CI_Controller {
     
 
     function keluar() {
-        $role = $this->session->user['role'];
         $this->LoginModel->clearUserSession();
-        if ($role == "superadmin" || $role == "admin_univ")
-            redirect(base_url('login'));
-        else
-            redirect(base_url('login'));
+        redirect(site_url('login'));
     }
 
     
