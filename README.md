@@ -8,8 +8,10 @@ This is open source Digital Archive Management System project. This system has m
 5. Folder Management.
 
 ## Dashboard
+<img src="https://github.com/rezafaisal/ULMFMIPA-Arsip/blob/master/images/arsip01.JPG" />
 
 ## Data Master Management
+<img src="https://github.com/rezafaisal/ULMFMIPA-Arsip/blob/master/images/arsip02.JPG" />
 
 ## User Management
 
