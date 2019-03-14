@@ -6,3 +6,13 @@ This is open source Digital Archive Management System project. This system has m
 3. Application Setup.
 4. Archive Management.
 5. Folder Management.
+
+## Dashboard
+
+## Data Master Management
+
+## Application Setup
+
+## Archive Management
+
+## Folder Management
