@@ -18,6 +18,8 @@ This is open source Digital Archive Management System project. This system has m
 ## User Management
 <img src="https://github.com/rezafaisal/ULMFMIPA-Arsip/blob/master/images/arsip04.JPG" />
 
+<img src="https://github.com/rezafaisal/ULMFMIPA-Arsip/blob/master/images/arsip05.JPG" />
+
 ## Archive Management
 
 ## Folder Management
