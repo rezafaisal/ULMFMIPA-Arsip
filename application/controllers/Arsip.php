@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Arsip extends CI_Controller {
+use thiagoalessio\TesseractOCR\TesseractOCR;
+class Arsip extends MY_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -29,6 +29,8 @@ class Arsip extends CI_Controller {
 		$this->load->model('ArsipModel');
 		$this->load->model('TipeArsipModel');
 		$this->load->model('OrganisasiModel');
+                $this->load->model('FolderModel');
+                $this->load->model('UserModel',"user");
 	}
 
 	public function index()
@@ -44,12 +46,15 @@ class Arsip extends CI_Controller {
     
     public function add()
 	{
-		$result['tipe_arsip']=$this->TipeArsipModel->list();
-		$result['unit_kerja']=$this->OrganisasiModel->list();
-
-		$this->load->view('templates/header');
+		$result['tipe_arsip']=$this->TipeArsipModel->getListData('kategori_id','nama');
+		$result['unit_kerja']=$this->OrganisasiModel->getListData('bidang_id','nama');
+                $result['user']=$this->user->getListDataModified('username','nama');
+                $whereFolder["parent_id"]=null;
+                $result['folder']=$this->FolderModel->getListDataModified('folder_id','nama',$whereFolder);
+                //print_r($result["user"]);
+		$this->load->view('templates/header_list');
 		$this->load->view('arsip/arsip_add', $result);
-		$this->load->view('templates/footer');
+		$this->load->view('templates/footer_list');
 	}
 
 	public function upload()
@@ -68,6 +73,72 @@ class Arsip extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
-	// Additional Methods
+	
+        
+    function do_add()
+    {
+        
+        $upload = $this->do_upload_eksekusi('file');
+	if (!$upload['status']){
+            $out["msg"]="Upload berkas gagal.";
+            $out["status"]=false;
+            echo json_encode($out);
+            exit;
+        }
+        $data['nama_file']=$upload['msg'];
+        $data['judul']= $this->input->post("judul");
+        $data['kategori_id']= $this->input->post("kategori_id");
+        $data['bidang_id']= $this->session->user["bidang_id"];
+        $data['tgl_unggah']=date('Y-m-d H:i:s');
+        $data['username_users']=$this->session->user["username"];
+        $data['nama_bidang']=$this->OrganisasiModel->getByPrimary($data['bidang_id'],"nama")["nama"];
+        $data['nama_kategori']=$this->TipeArsipModel->getByPrimary($data['kategori_id'],"nama")["nama"];
+        $viewer["bidang"]=json_decode($this->input->post("bidang"));
+        $viewer["user"]=json_decode($this->input->post("user"));
+        $viewer["folder"]=json_decode($this->input->post("folder"));
+        $save = $this->ArsipModel->insertCustom($data,$viewer);
+        if ($save){
+                $out["msg"]="Data berhasil dikirim";
+                $out["status"]=true;
+        } else {
+                $out["msg"]="Data gagal dikirim";
+                $out["status"]=false;
+        }
+        echo json_encode($out);
+    }
+    
+    function do_upload_eksekusi($textbox)
+    {
+	$config['overwrite'] = TRUE;
+	$config['upload_path'] = './uploads/pdf/';
+	$config['allowed_types'] = 'pdf';
+			//$config['max_size'] = '36000';
+	$this->load->library('upload', $config);
+	if ( ! $this->upload->do_upload($textbox) )
+        {
+            $out["status"]=false;
+            $out["msg"]=$this->upload->display_errors();
+            return $out;
+	} else {
+            $upload = $this->upload->data();
+            $filename   = trim(addslashes($_FILES['file']['name']));
+            $parts      = explode('.', $filename);
+            $nama       = str_replace(' ', '_', array_shift($parts))."_".date('YmdHis');
+            rename("./uploads/pdf/".$upload['file_name'], "./uploads/pdf/".$nama.$upload['file_ext']);
+            $out["status"]=true;
+            $out["msg"]=$nama.$upload['file_ext'];
+            return $out;
+				
+	}
+    }
+    
+    function test(){
+        $output = shell_exec('tesseract http://localhost/uploads/pdf/text.png'); 
+  
+        // Display the list of all file 
+        // and directory 
+        echo "<pre>$output</pre>"; 
+
+    }
 	
 }

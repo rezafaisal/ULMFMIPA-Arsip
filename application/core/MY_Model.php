@@ -217,6 +217,7 @@ class MY_Model extends CI_Model {
             $result = $query->row(0, get_class($this));
         return $result;
     }
+    
 
     /**
      * @param array $param parameter select,where,sort,dan order
@@ -239,6 +240,24 @@ class MY_Model extends CI_Model {
         }
         $query = $this->db->get($this->table);
         return $query->result_array();
+    }
+    
+    function getListDataModified($key, $value, $where = NULL, $order = NULL, $placeholder = NULL) {
+        $this->db->select(array($key, $value));
+        if ($where != NULL)
+            $this->db->where($where);
+        if ($order != NULL)
+            $this->db->order_by($order);
+        
+        $query = $this->db->get($this->table);
+        $result = $query->result_array();
+        $return = array();
+        if ($placeholder != NULL)
+            $return = array('' => $placeholder);
+        foreach ($result as $data) {
+            $return[$data[$key]] = $data[$value];
+        }
+        return $return;
     }
 
     function getListData($key, $value, $where = NULL, $order = NULL, $placeholder = NULL) {

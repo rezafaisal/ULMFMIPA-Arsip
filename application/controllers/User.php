@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class User extends CI_Controller {
+class User extends MY_Controller {
 public function __construct()
     {
 		parent::__construct();
@@ -66,6 +66,8 @@ public function __construct()
                 $role=$model_input["role"];
                 $this->form_validation->set_rules($this->user->rules("tetap"));
                 if ($this->form_validation->run()){
+                    if ($model_input["password"]!="")
+                        $data["password"]=md5($model_input["password"]);
                     if($model['id']!==null){
                         if ($model["username"]!=$model_input["username"]){
                             
@@ -87,6 +89,7 @@ public function __construct()
                             }
                         }
                     }else{
+                        $data["password"]=md5($model_input["password"]);
                         $data["created"]=date("Y-m-d h:i:s");
                         if ($this->user->existAttr('nama',$data["username"])){
                             if ($this->user->insert($data)){

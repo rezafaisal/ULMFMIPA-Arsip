@@ -243,27 +243,16 @@
                     <img src="<?php echo base_url(); ?>resources/images/user.png" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dr. Abdul Gafur, M.Si, M.Sc, Ph.D</div>
-                    <div class="email">abdul.gafur@ulm.ac.id</div>
-                    <div class="btn-group user-helper-dropdown">
-                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
-                        </ul>
-                    </div>
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $this->session->user["nama"];?></div>
+                    <div class="email"><?php echo $this->session->user["email"];?></div>
+                    
                 </div>
             </div>
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
             <ul class="list">
-                    <li class="header">MAIN NAVIGATION</li>
+                    <li class="header">NAVIGASI UTAMA</li>
                     <li class="active">
                         <a href="<?php echo base_url(); ?>">
                             <i class="material-icons">home</i>
@@ -306,7 +295,7 @@
                                 <a href="<?php echo base_url(); ?>index.php/arsip">Daftar Arsip</a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url(); ?>index.php/task">Folder</a>
+                                <a href="<?php echo base_url(); ?>index.php/folder">Folder</a>
                             </li>
                         </ul>
                     </li>
@@ -323,6 +312,13 @@
                                 <a href="pages/ui/animations.html">User</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="header">ACCOUNT</li>
+                    <li class="">
+                        <a href="<?php echo site_url("edit_profil"); ?>">
+                            <i class="material-icons">person</i>
+                            <span>Edit Profil</span>
+                        </a>
                     </li>
                     <li class="">
                         <a href="<?php echo site_url("login/keluar"); ?>">

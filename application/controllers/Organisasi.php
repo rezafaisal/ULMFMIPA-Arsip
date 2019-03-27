@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Organisasi extends CI_Controller {
+class Organisasi extends MY_Controller {
 
 	/**
 	 * Index Page for this controller.

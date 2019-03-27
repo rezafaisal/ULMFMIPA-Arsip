@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Welcome extends MY_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -25,8 +25,8 @@ class Welcome extends CI_Controller {
 
 		$this->load->helper('url'); 
 		
-		$this->load->view('templates/header');
-		$this->load->view('templates/footer');
+		$this->load->view('templates/header_list');
+		$this->load->view('templates/footer_list');
 
 		$this->load->view('welcome/dashboard_fakultas');
 	}

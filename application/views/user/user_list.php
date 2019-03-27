@@ -109,8 +109,30 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
+                    <div class="row clearfix padding-form">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Password</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan password">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix padding-form">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Password (ulangi)</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="password" id="password_ulang" name="password_ulang" class="form-control" placeholder="Masukkan password">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row clearfix padding-form">
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                             <label for="email_address_2">Nama</label>
@@ -228,7 +250,7 @@
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="password_pass" name="password_pass" class="form-control" placeholder="Masukkan password">
+                                    <input type="password" id="password_pass" name="password_pass" class="form-control" placeholder="Masukkan password">
                                 </div>
                             </div>
                         </div>
@@ -296,6 +318,21 @@
             rules: {
 		nama: {required: true},
                 username: {required: true},
+                password: {
+                    required: function(){
+                        var id_edit=$("#kode").val();
+                        if (id_edit!="")
+                        return false; else
+                        return true;
+                    }
+                },
+                password_ulang: {
+                    required: function(){
+                        var id_edit=$("#kode").val();
+                        if (id_edit!="")
+                        return false; else
+                        return true;
+                    }, equalTo : "#password"},
                 bidang_id: {required: true},
                 email: {required: true,email:true},
                 'role[]': {required: true}
@@ -303,6 +340,8 @@
             messages: {
                 nama: {required: "Wajib diisi"},
                 username: {required: "Wajib diisi"},
+                password: {required: "Wajib diisi"},
+                password_ulang: {required: "Wajib diisi",equalTo : "Password belum cocok."},
                 bidang_id: {required: "Wajib diisi"},
                 email: {required: "Wajib diisi",email: "Format email salah"},
                 'role[]': {required: "Wajib diisi"}
@@ -361,6 +400,7 @@
         $('#bidang_id').selectpicker('val', role);
         $('input[name=activated][value="1"]').prop('checked', true);
         $('input[name=banned][value="0"]').prop('checked', true);
+        $("#kode").val("");
     }
     function setModalHapus(dom) {
         var id = dom.data('id');
@@ -490,6 +530,8 @@
             success: function (data) {
                 if (data.simpan) {
                     $.each(data.model, function (key, value) {
+                        if (key=="password")
+                            $('#password').val(""); else
                         if (key=="activated" || key=="banned")
                             $('input[name='+ key +'][value="'+value+'"]').prop('checked', true); else
                         if (key=="bidang_id")

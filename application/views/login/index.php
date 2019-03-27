@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <?php echo $status;?>
+                        <center style="color:red"><?php echo $status;?></center>
                     </div>
                 </form>
             </div>
