@@ -196,7 +196,7 @@
                         return edit+detail+hapus;
                     }
                 },
-                {data: 'nama',name:'nama'},
+                {data: 'nama_folder',name:'nama_folder'},
                 {data: 'unit',name:'unit'},
                 {data: 'tgl_buat'},
                 

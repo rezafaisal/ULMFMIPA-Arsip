@@ -55,8 +55,11 @@
                             <thead>
                                 <tr>
                                     <th style="width:35px">AKSI</th>
-                                    <th>NAMA</th>
-                                    <th>KETERANGAN</th>
+                                    <th>NAMA FILE</th>
+                                    <th>JUDUL</th>
+                                    <th>ISI</th>
+                                    <th>NAMA KATEGORI</th>
+                                    <th>NAMA UNIT</th>
                                 </tr>
                             </thead>
                         </table>
@@ -70,7 +73,7 @@
 <div id="modal-hapus" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <div class="modal-header"><h5 id="modal-title">Hapus Role</h5></div>
+            <div class="modal-header"><h5 id="modal-title">Hapus File Dari Folder</h5></div>
             <input type="hidden" id="id-delete" name="id-delete"/>
             <div class="modal-body">
             </div>
@@ -135,6 +138,28 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="lihatFileModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <!-- File Upload | Drag & Drop OR With Click & Choose -->
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                DETAIL FILE
+                            </h2>
+                        </div>
+                        <div class="body boxLihatFile">
+                            <!-- http://harviacode.com/2015/11/11/menampilkan-pdf-dalam-halaman-html-dan-modal-boostrap/ -->
+                           
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">TUTUP</button>
+                        </div>
+                    </div>
+                    <!-- #END# File Upload | Drag & Drop OR With Click & Choose -->
+                </div>
+            </div>
+        </div>
 <script>
     var oTable;
     
@@ -149,23 +174,35 @@
             pagingType : 'numbers',
             stateSave: true,
             oLanguage: { sProcessing: "Sedang memuat data..."},
-            ajax: "<?php echo site_url('organisasi'); ?>",
+            ajax: "<?php echo site_url('folder/arsip_selected/').$folder["folder_id"]; ?>",
             lengthMenu: [10, 20, 30],
             dom: '<"top">lrt<"bottom"p>',
-            columnDefs: [{"className": "dt-tengah", "targets": [2]}],
+            //"aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
             columns: [
-                {data: 'bidang_id',name:'bidang_id', searchable: false, orderable: false,
+                {data: 'id',name:'id', searchable: false, orderable: false,
                     render: function (data,type,row) {
                         var edit = "<a data-id=" + data + " onclick='edit($(this));return false;' title='Ubah'><i class='material-icons'>edit</i></a> ";
-                        var hapus = "<a data-id='" + data + "' data-text='" + row.nama + "' data-backdrop='static' data-toggle='modal' data-target='#modal-hapus' onclick='return setModalHapus($(this));' href='#' title='Hapus'><i class='material-icons'>delete_forever</i></a> ";
-                        return edit+hapus;
+                        var hapus = "<a data-id='" + data + "' data-text='" + row.nama_file + "' data-backdrop='static' data-toggle='modal' data-target='#modal-hapus' onclick='return setModalHapus($(this));' href='#' title='Hapus'><i class='material-icons'>delete_forever</i></a> ";
+                        var detail = "<a data-id='" + data + "' data-text='" + row.nama_file + "' onclick='lihatFile($(this));return false;' title='detail'><i class='material-icons'>remove_red_eye</i></a> ";
+                        return detail+hapus;
                     }
                 },
-                {data: 'nama',name:'nama'},
-                {data: 'keterangan',name:'keterangan'}
+                {data: 'nama_file',name:'data_arsip.nama_file',
+                    render: function (data,type,row) {
+                        var isi="<br>"+row.isi;
+                        var judul="<br>"+row.judul;
+                        var kategori="<br><b>Kategori : </b>"+row.nama_kategori;
+                        var unit="<br><b>Unit : </b>"+row.nama_unit;
+                        return data+judul+isi+kategori+unit;
+                    }},
+                {data: 'judul',name:'data_arsip.judul'},
+                {data: 'isi',name:'data_arsip.isi'},
+                {data: 'nama_kategori',name:'kat.nama'},
+                {data: 'nama_unit',name:'unit.nama'}
                 
             ]
         });
+        oTable.columns([2,3,4,5]).visible(false);
         $('#form-simpan').validate({
             rules: {
 		nama: {required: true},
@@ -207,19 +244,26 @@
         $("#nama").val("");
         $("#keterangan").val("");
     }
+    function lihatFile(dom) {
+        var id = dom.data('id');
+        var text = dom.data('text');
+        $("#lihatFileModal").modal("show");
+        $(".boxLihatFile").html(' <embed src="<?php echo base_url()."uploads/pdf/";?>'+text+'" frameborder="0" width="100%" height="400px">');
+        
+    }
     function setModalHapus(dom) {
         var id = dom.data('id');
         var text = dom.data('text');
         $(".fa-spinner").hide();
         $("#btn-hapus").show();
-        $("#modal-hapus .modal-body").html("Anda yakin menghapus unit kerja "+text+"?");
+        $("#modal-hapus .modal-body").html("Anda yakin menghapus file ini dari folder?");
         $("#id-delete").val(id);
     }
     function hapus() {
         var id = $("#id-delete").val();
         $.ajax({
-            url: "<?php echo site_url('organisasi/hapus'); ?>",
-            data: {'id': id},
+            url: "<?php echo site_url('folder/hapusArsip'); ?>",
+            data: {'id': id,'folder_id':<?php echo $folder["folder_id"];?>},
             dataType: 'JSON',
             beforeSend: function () {
                 $(".fa-spinner").show();

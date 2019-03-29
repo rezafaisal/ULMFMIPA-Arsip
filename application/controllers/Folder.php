@@ -37,7 +37,7 @@ class Folder extends MY_Controller {
             $request = $this->input->get();
             $where["parent_id"]=null;
             $data = $this->folder->getDataGrid($request,
-                    'folder.folder_id, folder.nama, unit.nama as unit, folder.tgl_buat',
+                    'folder.folder_id, folder.nama as nama_folder, unit.nama as unit, folder.tgl_buat',
                     $where,
                     'left');
            // echo $this->db->last_query();
@@ -335,6 +335,36 @@ class Folder extends MY_Controller {
                 echo json_encode($response);
             }
     }
+    public function hapusArsip(){
+
+            if($this->input->is_ajax_request()){
+                $id = $this->input->get('id');
+                $folder_id = $this->input->get('folder_id');
+                $where["arsip_id"]=$id;
+                $where["folder_id"]=$folder_id;
+                $exist=$this->inarsip->existAttr($where);
+                if ($exist){
+                    
+                        if($this->inarsip->delete($where))
+                        {
+                            $response['hapus'] = true;
+                            $response['pesan'] = "Arsip berhasil dihapus.";
+                        }
+                        else
+                        {
+                            $response['hapus'] = false;
+                            $response['pesan'] = "Arsip gagal dihapus.";
+                        }
+                   
+                    
+                } else {
+                    
+                    $response['hapus'] = false;
+                    $response['pesan'] = "Arsip gagal dihapus.";
+                }    
+                echo json_encode($response);
+            }
+    }
     function getPath($id){
         $this->getPathDo($id);
         //print_r($this->stackPath);
@@ -360,8 +390,10 @@ class Folder extends MY_Controller {
     function arsip_selected($id){
         if($this->input->is_ajax_request()){
             $request = $this->input->get();
-            $data = $this->FolderInArsipModel->getDataGrid($request,
-                    'arsip.id,arsip.nama_file, arsip.isi, kat.nama as nama_kategori, unit.nama as nama_unit');
+            $where["arsip_in_folder.folder_id"]=$id;
+            $data = $this->inarsip->getDataGrid($request,
+                    'data_arsip.id,data_arsip.nama_file,data_arsip.judul, data_arsip.isi, kat.nama as nama_kategori, unit.nama as nama_unit',
+                    $where);
             //echo $this->db->last_query();
             echo json_encode($data);
         }else{
