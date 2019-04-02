@@ -57,7 +57,6 @@
                                     <th style="width:35px">AKSI</th>
                                     <th>NAMA FILE</th>
                                     <th>JUDUL</th>
-                                    <th>ISI</th>
                                     <th>NAMA KATEGORI</th>
                                     <th>NAMA UNIT</th>
                                 </tr>
@@ -177,7 +176,6 @@
             ajax: "<?php echo site_url('folder/arsip_selected/').$folder["folder_id"]; ?>",
             lengthMenu: [10, 20, 30],
             dom: '<"top">lrt<"bottom"p>',
-            //"aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
             columns: [
                 {data: 'id',name:'id', searchable: false, orderable: false,
                     render: function (data,type,row) {
@@ -189,20 +187,18 @@
                 },
                 {data: 'nama_file',name:'data_arsip.nama_file',
                     render: function (data,type,row) {
-                        var isi="<br>"+row.isi;
                         var judul="<br>"+row.judul;
                         var kategori="<br><b>Kategori : </b>"+row.nama_kategori;
                         var unit="<br><b>Unit : </b>"+row.nama_unit;
-                        return data+judul+isi+kategori+unit;
+                        return data+judul+kategori+unit;
                     }},
                 {data: 'judul',name:'data_arsip.judul'},
-                {data: 'isi',name:'data_arsip.isi'},
                 {data: 'nama_kategori',name:'kat.nama'},
                 {data: 'nama_unit',name:'unit.nama'}
                 
             ]
         });
-        oTable.columns([2,3,4,5]).visible(false);
+        oTable.columns([2,3,4]).visible(false);
         $('#form-simpan').validate({
             rules: {
 		nama: {required: true},

@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+define('PATH_PDFTOTEXT', '/usr/local/bin/pdftotext');
+define('PATH_PDFTOPNG', '/usr/local/bin/pdftopng');
+define('PATH_TESSERACT', '/usr/local/bin/tesseract');
+define('PATH_UPLOAD', '/Applications/XAMPP/htdocs/ULMFMIPA-Arsip/uploads/pdf/');
 /*
 |--------------------------------------------------------------------------
 | Display Debug backtrace

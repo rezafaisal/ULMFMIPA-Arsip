@@ -85,7 +85,10 @@ class Arsip extends MY_Controller {
             echo json_encode($out);
             exit;
         }
+        
+        //print_r($upload);exit;
         $data['nama_file']=$upload['msg'];
+        $data['isi']=$upload['isi'];
         $data['judul']= $this->input->post("judul");
         $data['kategori_id']= $this->input->post("kategori_id");
         $data['bidang_id']= $this->session->user["bidang_id"];
@@ -124,21 +127,44 @@ class Arsip extends MY_Controller {
             $filename   = trim(addslashes($_FILES['file']['name']));
             $parts      = explode('.', $filename);
             $nama       = str_replace(' ', '_', array_shift($parts))."_".date('YmdHis');
+            
             rename("./uploads/pdf/".$upload['file_name'], "./uploads/pdf/".$nama.$upload['file_ext']);
-            $out["status"]=true;
-            $out["msg"]=$nama.$upload['file_ext'];
+            
+            if (strtolower($upload['file_ext'])==".pdf")
+                $out["isi"]= $this->pdftotext($nama.$upload['file_ext']); else
+                $out["isi"]= $this->tesseract($nama.$upload['file_ext']);
+            if ($out["isi"]==null){
+                $out["status"]=false;
+                $out["msg"]="Isi file tidak terbaca, gagal menyimpan arsip.";
+                unlink("./uploads/pdf/".$nama.$upload['file_ext']);
+            } else {
+                $out["status"]=true;
+                $out["msg"]=$nama.$upload['file_ext'];
+            }
             return $out;
 				
 	}
     }
-    
-    function test(){
-        $output = shell_exec('tesseract http://localhost/uploads/pdf/text.png'); 
-  
+    function pdftotext($file){
+        //echo PATH_PDFTOTEXT." ".PATH_UPLOAD.$file." - ";
+        $str=shell_exec(PATH_PDFTOTEXT." ".PATH_UPLOAD.$file." - ");
+        return preg_replace( '/[^A-Za-z0-9 _\-\+\&]/', '',$str); 
+    }
+    function tesseract($file){
+        //$output = shell_exec('tesseract http://localhost/uploads/pdf/text.png'); 
+        $out= explode(".", $file);
+        try {
+            shell_exec(PATH_TESSERACT." ".PATH_UPLOAD.$file." ".PATH_UPLOAD.$out[0]);
+            //echo $out[1];
+            $content= file_get_contents(PATH_UPLOAD.$out[0].".txt");
+        //unlink(PATH_UPLOAD.$out[0].".txt") or die("Couldn't delete file");
+        } catch (Exception $e){
+            echo $e;
+        }
         // Display the list of all file 
         // and directory 
-        echo "<pre>$output</pre>"; 
-
+        return $content; 
+        
     }
 	
 }

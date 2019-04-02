@@ -112,6 +112,7 @@ class FolderModel extends MY_Model
    function createTabel($id)
     {
         $query = $this->db->query("CALL nested($id)");
+        mysqli_next_result( $this->db->conn_id );
         return $query;
     }
     public function insertGetLastId($data){

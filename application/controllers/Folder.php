@@ -392,7 +392,7 @@ class Folder extends MY_Controller {
             $request = $this->input->get();
             $where["arsip_in_folder.folder_id"]=$id;
             $data = $this->inarsip->getDataGrid($request,
-                    'data_arsip.id,data_arsip.nama_file,data_arsip.judul, data_arsip.isi, kat.nama as nama_kategori, unit.nama as nama_unit',
+                    'data_arsip.id,data_arsip.nama_file,data_arsip.judul, kat.nama as nama_kategori, unit.nama as nama_unit',
                     $where);
             //echo $this->db->last_query();
             echo json_encode($data);
