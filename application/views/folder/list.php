@@ -190,9 +190,10 @@
             columns: [
                 {data: 'folder_id',name:'folder_id', searchable: false, orderable: false,
                     render: function (data,type,row) {
+                        console.log(row);
                         var edit = "<a data-id=" + data + " onclick='edit($(this));return false;' title='Ubah'><i class='material-icons'>edit</i></a> ";
                         var detail = "<a href='<?php echo site_url("folder/detail/");?>"+row.folder_id+"' title='detail'><i class='material-icons'>remove_red_eye</i></a> ";
-                        var hapus = "<a data-id='" + data + "' data-text='" + row.nama + "' data-backdrop='static' data-toggle='modal' data-target='#modal-hapus' onclick='return setModalHapus($(this));' href='#' title='Hapus'><i class='material-icons'>delete_forever</i></a> ";
+                        var hapus = "<a data-id='" + data + "' data-text='" + row.nama_folder + "' data-backdrop='static' data-toggle='modal' data-target='#modal-hapus' onclick='return setModalHapus($(this));' href='#' title='Hapus'><i class='material-icons'>delete_forever</i></a> ";
                         return edit+detail+hapus;
                     }
                 },

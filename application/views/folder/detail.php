@@ -77,7 +77,7 @@
                                     <td>
                                          <?php
                                                 if (($row->rgt-$row->lft)==1){
-                                                    echo '<a href="'. site_url("folder/arsip_selected/").$row->emp.'"<i class="material-icons">remove_red_eye</i></a>';
+                                                    echo '<a href="'. site_url("folder/arsip_selected/").$row->emp."/".$group_id.'"<i class="material-icons">remove_red_eye</i></a>';
                                                 }
                                             ?>
                                     </td>

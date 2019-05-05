@@ -19,6 +19,7 @@ class Folder extends MY_Controller {
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
     protected $stackPath=array();
+    protected $stackId=array();
     public function __construct()
 	{
 		parent::__construct();
@@ -148,40 +149,52 @@ class Folder extends MY_Controller {
                 $model_input["tgl_buat"]=date("Y-m-d H:i:s");
                 $model_input["parent_id"]=$this->input->post("parent_id");
                 $model_input["group_id"]=$this->input->post("group_id");
+                $isInViewer=false;
+                //print_r($this->folder->getUserInViewerFolder($model_input["group_id"]));
+                foreach ($this->folder->getUserInViewerFolder($model_input["group_id"]) as $row){
+                    //echo $row;
+                    if ($row["id"]==$this->session->user["id"])
+                        $isInViewer=true;
+                }
                 $this->load->library('form_validation');
                 $this->form_validation->set_rules($this->folder->rules("tetap"));
                 $this->form_validation->set_data($model_input);
-                if ($this->form_validation->run()){
-                    if($model['folder_id']!==null){
-                        if ($this->folder->update($id,$model_input)){
-                            $response["simpan"]=true;
-                            $response["pesan"]="Folder berhasil diupdate.";
-                            $response["table"]= $this->populate_folder($model_input["group_id"]);
-                        }
-                    }else{
-                        $this->form_validation->set_rules($this->folder->rules());
-                        if ($this->form_validation->run()){
-                            $where["folder_id"]=$model_input["parent_id"];
-                            if (!$this->inarsip->existAttr($where)){
-                                //echo $this->db->last_query();
-                                $insert=$this->folder->insertGetLastId($model_input);
-                                if ($insert>0){
-                                    $response["simpan"]=true;
-                                    $response["pesan"]="Folder berhasil dibuat.";
-                                    $response["table"]=$this->populate_folder($model_input["group_id"]);
+                if ($isInViewer){
+                    if ($this->form_validation->run()){
+                        if($model['folder_id']!==null){
+                            if ($this->folder->update($id,$model_input)){
+                                $response["simpan"]=true;
+                                $response["pesan"]="Folder berhasil diupdate.";
+                                $response["table"]= $this->populate_folder($model_input["group_id"]);
+                            }
+                        }else{
+                            $this->form_validation->set_rules($this->folder->rules());
+                            if ($this->form_validation->run()){
+                                $where["folder_id"]=$model_input["parent_id"];
+                                if (!$this->inarsip->existAttr($where)){
+                                    //echo $this->db->last_query();
+                                    $insert=$this->folder->insertGetLastId($model_input);
+                                    if ($insert>0){
+                                        $response["simpan"]=true;
+                                        $response["pesan"]="Folder berhasil dibuat.";
+                                        $response["table"]=$this->populate_folder($model_input["group_id"]);
+                                    }
+                                } else {
+                                    $response['simpan'] = false;
+                                    $response['pesan'] = "Tidak dapat membuat sub folder baru. Folder ini telah dipakai diarsip.";
                                 }
                             } else {
                                 $response['simpan'] = false;
-                                $response['pesan'] = "Tidak dapat membuat sub folder baru. Folder ini telah dipakai diarsip.";
-                            }
-                        } else {
-                            $response['simpan'] = false;
-                            $response['pesan'] = validation_errors();
-                        }    
+                                $response['pesan'] = validation_errors();
+                            }    
+                        }
+                    }else{
+                        $response['simpan'] = false;
+                        $response['pesan'] = validation_errors();
                     }
                 }else{
-                    $response['simpan'] = false;
-                    $response['pesan'] = validation_errors();
+                        $response['simpan'] = false;
+                        $response['pesan'] = "Anda tidak memiliki hak akses.";
                 }
                 echo json_encode($response);
             }
@@ -214,7 +227,7 @@ class Folder extends MY_Controller {
             $w=$width."%";
             $btnLihat="";
             if (($row->rgt-$row->lft)==1){
-                $btnLihat='<a href="'. site_url("folder/arsip_selected/").$row->emp.'"><i class="material-icons">remove_red_eye</i></a>';
+                $btnLihat='<a href="'. site_url("folder/arsip_selected/").$row->emp."/".$id.'"><i class="material-icons">remove_red_eye</i></a>';
             }
         
             $tbl.='                    
@@ -275,29 +288,46 @@ class Folder extends MY_Controller {
         return $tbl;
         //echo "</table>";
     }
+    
+    function createFolderTest(){
+        $id= $this->input->post("folder_id");
+        $data["data"]=$this->folder->createTabel($id)->result();
+        echo json_encode($data);
+    }
     public function hapusdetail(){
 
             if($this->input->is_ajax_request()){
                 $id = $this->input->get('id');
                 $model = $this->folder->getByPrimary($id,'*',true,true);
-                $where["folder_id"]=$id;
-                $parent=$this->inarsip->existAttr($where);
-                if (isset($model["folder_id"]) && $parent){
+                $where["parent_id"]=$id;
+                $parent=$this->folder->existAttr($where);
+                $whereInArsip["folder_id"]=$id;
+                $adaArsip=$this->inarsip->existAttr($whereInArsip);
+                //exit;
+                if ($parent){
+                    $response['hapus'] = false;
+                    $response['pesan'] = "Folder gagal dihapus. Masih ada folder didalamnya.";
+                    
+                } if ($adaArsip){
                     $response['hapus'] = false;
                     $response['pesan'] = "Folder gagal dihapus. Masih ada file didalamnya.";
-                    
                 } else {
-                    if($this->folder->delete($id))
-                    {
-                        $response['hapus'] = true;
-                        $response['pesan'] = "Folder berhasil dihapus.";
-                        $response["table"]=$this->populate_folder($model["group_id"]);
-                    }
-                    else
-                    {
+                    if ($model["pemilik_id"]==$this->session->user["id"]){
+                        if($this->folder->delete($id))
+                        {
+                            $response['hapus'] = true;
+                            $response['pesan'] = "Folder berhasil dihapus.";
+                            $response["table"]=$this->populate_folder($model["group_id"]);
+                        }
+                        else
+                        {
+                            $response['hapus'] = false;
+                            $response['pesan'] = "Folder gagal dihapus.";
+                        }
+                    } else {
                         $response['hapus'] = false;
-                        $response['pesan'] = "Folder gagal dihapus.";
-                    }
+                        $response['pesan'] = "Folder gagal dihapus. Anda bukan pemilik folder ini.";
+                    }    
                     
                 }    
                 echo json_encode($response);
@@ -315,7 +345,7 @@ class Folder extends MY_Controller {
                     $response['pesan'] = "Folder gagal dihapus. Masih ada folder didalamnya.";
                     
                 } else {
-                    if ($model["pemilid_id"]==$this->sesion->user["id"]){
+                    if ($model["pemilik_id"]==$this->session->user["id"]){
                         if($this->folder->delete($id))
                         {
                             $response['hapus'] = true;
@@ -365,6 +395,22 @@ class Folder extends MY_Controller {
                 echo json_encode($response);
             }
     }
+    function getPathLink($id,$except){
+        $path="";
+        $this->getPathDo($id);
+        //print_r($this->stackPath);
+        for ($i=sizeof($this->stackPath)-1;$i>=0;$i--){
+            if ($i==0)
+                $panah=""; 
+                else $panah=" > ";
+            
+                if ($i==sizeof($this->stackPath)-1)
+                $path.= "<a href='". site_url("folder/detail/").$this->stackId[$i]."'>".$this->stackPath[$i]."</a>".$panah; else
+                $path.= $this->stackPath[$i].$panah;
+            
+        }
+        return $path;
+    }
     function getPath($id){
         $this->getPathDo($id);
         //print_r($this->stackPath);
@@ -380,6 +426,7 @@ class Folder extends MY_Controller {
         $ambiljumlah=$this->folder->getByPrimary($id,'*',true);
         
         array_push($this->stackPath, $ambiljumlah["nama"]);
+        array_push($this->stackId, $ambiljumlah["folder_id"]);
         if ($ambiljumlah["parent_id"]!=null){
         $this->getPathDo($ambiljumlah["parent_id"]);
         }
@@ -387,7 +434,7 @@ class Folder extends MY_Controller {
         
     }
     
-    function arsip_selected($id){
+    function arsip_selected($id,$parent){
         if($this->input->is_ajax_request()){
             $request = $this->input->get();
             $where["arsip_in_folder.folder_id"]=$id;
@@ -399,6 +446,9 @@ class Folder extends MY_Controller {
         }else{
             $this->load->library('form_validation');
             $result["folder"] = $this->folder->getByPrimary($id,'*',true);
+            $result["path"]=$this->getPathLink($id,$id);
+            $result["parent"]=$parent;
+            //echo $result["path"];exit;
             $this->load->view('templates/header_list');
             $this->load->view('folder/arsip_list',$result);
             $this->load->view('templates/footer_list');

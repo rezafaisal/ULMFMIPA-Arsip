@@ -26,7 +26,7 @@
                     <div class="header">
                         <h2>
                             
-                            <a href="<?php echo site_url("folder");?>">DAFTAR FOLDER</a> > <?php echo $folder["nama"];?>
+                            <a href="<?php echo site_url("folder");?>">DAFTAR FOLDER</a> > <?php echo $path;?>
                         
                         </h2>
                         <ul class="header-dropdown m-r--5">
@@ -42,6 +42,12 @@
                     </div>
                     <div class="body table-responsive">
                         <div class="row">
+                            <div class="col-md-4 pull-left">
+                                <div class="form-group">
+                                        <a href="<?php echo site_url("folder/detail/".$parent);?>" class="btn btn-primary">Kembali</a>
+                                </div>
+                               
+                            </div>
                             <div class="col-md-4 pull-right">
                                 <div class="form-group">
                                     <div class="form-line">
@@ -173,7 +179,7 @@
             pagingType : 'numbers',
             stateSave: true,
             oLanguage: { sProcessing: "Sedang memuat data..."},
-            ajax: "<?php echo site_url('folder/arsip_selected/').$folder["folder_id"]; ?>",
+            ajax: "<?php echo site_url('folder/arsip_selected/').$folder["folder_id"]."/".$parent; ?>",
             lengthMenu: [10, 20, 30],
             dom: '<"top">lrt<"bottom"p>',
             columns: [
