@@ -235,6 +235,7 @@
         $("#nama").val("");
         $("#keterangan").val("");
         $("#level").val("");
+        $("#kode").val("");
     }
     function setModalHapus(dom) {
         console.log(dom.data('id'));

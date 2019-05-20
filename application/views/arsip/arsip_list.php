@@ -997,6 +997,7 @@
         $('#kategori_id').selectpicker('val', '');
         $('#bidang_id').selectpicker('val', '');
         $('#user').selectpicker('val', '');
+        $("#kode").val("");
         
     }
 </script>

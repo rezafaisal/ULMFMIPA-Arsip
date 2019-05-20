@@ -197,9 +197,9 @@
                         return edit+detail+hapus;
                     }
                 },
-                {data: 'nama_folder',name:'nama_folder'},
-                {data: 'unit',name:'unit'},
-                {data: 'tgl_buat'},
+                {data: 'nama_folder',name:'folder.nama'},
+                {data: 'unit',name:'unit.nama'},
+                {data: 'tgl_buat',name:'folder.tgl_buat'},
                 
             ]
         });
@@ -322,6 +322,7 @@
         $("#nama").val("");
         $("#keterangan").val("");
         $("#level").val("");
+        $("#kode").val("");
         dataSet=[];
         reload_user();
     }

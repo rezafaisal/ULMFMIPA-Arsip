@@ -201,7 +201,7 @@
         });
     });
     function formClear() {
-    
+        $("#kode").val("");
         $("#btn-simpan").show();
         $("#nama").val("");
         $("#keterangan").val("");

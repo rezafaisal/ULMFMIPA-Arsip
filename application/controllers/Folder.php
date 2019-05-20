@@ -36,12 +36,16 @@ class Folder extends MY_Controller {
          
         if($this->input->is_ajax_request()){
             $request = $this->input->get();
+            $id= $this->session->user["id"];
             $where["parent_id"]=null;
+            $where["(folder.`pemilik_id`=$id OR vfolder.`viewer_id`=$id)"]=null;
+            
             $data = $this->folder->getDataGrid($request,
                     'folder.folder_id, folder.nama as nama_folder, unit.nama as unit, folder.tgl_buat',
                     $where,
                     'left');
-           // echo $this->db->last_query();
+            //print_r($data);
+            //echo $this->db->last_query();
             echo json_encode($data);
         }else{
             $this->load->library('form_validation');

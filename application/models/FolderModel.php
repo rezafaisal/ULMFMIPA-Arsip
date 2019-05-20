@@ -33,7 +33,8 @@ class FolderModel extends MY_Model
     public function relations(){
         return array(
             'viewer'=>array(self::HAS_ONE,'users','id','folder.pemilik_id'),
-            'unit'=>array(self::HAS_ONE,'bidang','bidang_id','viewer.bidang_id')
+            'unit'=>array(self::HAS_ONE,'bidang','bidang_id','viewer.bidang_id'),
+            'vfolder'=>array(self::HAS_ONE,'folder_viewer','folder_id','folder.folder_id')
         );
     }
     function insertCustom($data,$viewer) {
