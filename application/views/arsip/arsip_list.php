@@ -349,6 +349,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-link waves-effect btnSearchMoreDo">CARI</button>
+                            <button type="button" class="btn btn-link waves-effect btnResetOpsi">RESET OPSI</button>
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">TUTUP</button>
                         </div>
                     </div>
@@ -571,11 +572,18 @@
             $("#kataSearch").val($("#field-cari").val());
             $("#filterModal").modal("show");
         });
+        
         $(".btnSearchMoreDo").on('click', function(e) {
             
             $('#listTable').dataTable().fnFilter($("#kataSearch").val());
         });
-        
+        $(".btnResetOpsi").on('click', function(e) {
+            $("#kataSearch").val("");
+            $('#tipeSearch').selectpicker('val', '');
+            $('#unitSearch').selectpicker('val', '');
+            $('#pemilikSearch').selectpicker('val', '');
+            oTable.ajax.reload(null,false);
+        });
         $(document).on('click', '#btnSaveEdit', function(){
         if ($("form#form-simpan").validate().form() === true) 
 	{

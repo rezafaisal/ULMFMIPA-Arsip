@@ -38,12 +38,14 @@ class Folder extends MY_Controller {
             $request = $this->input->get();
             $id= $this->session->user["id"];
             $where["parent_id"]=null;
-            $where["(folder.`pemilik_id`=$id OR vfolder.`viewer_id`=$id)"]=null;
+            if ($this->session->user["role"]!="Admin" || $this->session->user["role"]!="Superadmin" )
+                $where["(folder.`pemilik_id`=$id OR vfolder.`viewer_id`=$id)"]=null;
             
             $data = $this->folder->getDataGrid($request,
-                    'folder.folder_id, folder.nama as nama_folder, unit.nama as unit, folder.tgl_buat',
+                    'folder.folder_id, folder.nama as nama_folder, viewer.nama as nama_pemilik, unit.nama as unit, folder.tgl_buat',
                     $where,
                     'left');
+            
             //print_r($data);
             //echo $this->db->last_query();
             echo json_encode($data);

@@ -54,6 +54,7 @@
                                 <tr>
                                     <th style="width:65px">AKSI</th>
                                     <th>FOLDER</th>
+                                    <th>PEMBUAT</th>
                                     <th>UNIT KERJA</th>
                                     <th>TANGGAL</th>
                                 </tr>
@@ -198,6 +199,7 @@
                     }
                 },
                 {data: 'nama_folder',name:'folder.nama'},
+                {data: 'nama_pemilik',name:'viewer.nama'},
                 {data: 'unit',name:'unit.nama'},
                 {data: 'tgl_buat',name:'folder.tgl_buat'},
                 

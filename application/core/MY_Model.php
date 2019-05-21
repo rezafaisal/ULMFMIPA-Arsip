@@ -242,8 +242,13 @@ class MY_Model extends CI_Model {
         return $query->result_array();
     }
     
-    function getListDataModified($key, $value, $where = NULL, $order = NULL, $placeholder = NULL) {
+    function getListDataModified($key, $value, $where = NULL, $order = NULL, $placeholder = NULL, $relasi=null) {
         $this->db->select(array($key, $value));
+        if ($relasi!=null)
+        foreach ($this->relations() as $alias => $relasi) {
+            if ($relasi[0] == self::HAS_ONE)
+                $this->db->join($relasi[1] . " as $alias", "$alias.$relasi[2] = $relasi[3]", "LEFT");
+        }
         if ($where != NULL)
             $this->db->where($where);
         if ($order != NULL)

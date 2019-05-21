@@ -393,9 +393,12 @@
     
         $("#btn-simpan").show();
         $("#nama").val("");
+        $("#username").prop("disabled",false);
         $("#username").val("");
         $("#email").val("");
         $("#email").val("");
+        $("#password").val("");
+        $("#password_ulang").val("");
         $('#role').selectpicker('val', '');
         $('#bidang_id').selectpicker('val', role);
         $('input[name=activated][value="1"]').prop('checked', true);
@@ -547,7 +550,7 @@
                     });
                     $("#kode").val(data.model.id);
                     console.log(data.model.bidang_id);
-                    
+                    $("#username").prop("disabled",true);
                     $(".fa-spinner").hide();
                     $("#btn-simpan").removeAttr("disabled");
                 } else {

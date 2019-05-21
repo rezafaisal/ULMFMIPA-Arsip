@@ -68,7 +68,7 @@
 <div id="modal-hapus" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <div class="modal-header"><h5 id="modal-title">Hapus Role</h5></div>
+            <div class="modal-header"><h5 id="modal-title">Hapus Tipe Arsip</h5></div>
             <input type="hidden" id="id-delete" name="id-delete"/>
             <div class="modal-body">
                 
@@ -196,7 +196,7 @@
 //        });
         $("#tambah").on('click', function(e) {
             formClear();
-            $("#modal-form #modal-title").html("Tambah Role");
+            $("#modal-form #modal-title").html("Tambah Tipe Arsip");
             $("#modal-form").modal('show');
         });
     });
@@ -281,7 +281,7 @@
             dataType: 'JSON',
             beforeSend: function () {
                 $("#modal-form").modal('show');
-                $("#modal-form #modal-title").html("Update Role");
+                $("#modal-form #modal-title").html("Update Tipe Arsip");
                 $(".fa-spinner").show();
                 $("#btn-simpan").attr("disabled", true);
             },

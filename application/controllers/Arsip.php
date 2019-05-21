@@ -60,8 +60,8 @@ class Arsip extends MY_Controller {
             $result['tipe_arsip']=$this->TipeArsipModel->getListData('kategori_id','nama');
             $result['unit_kerja']=$this->OrganisasiModel->getListData('bidang_id','nama');
             $result['user']=$this->user->getListDataModified('username','nama');
-            $whereFolder["parent_id"]=null;
-            $result['folder']=$this->FolderModel->getListDataModified('folder_id','nama',$whereFolder);
+            //$whereFolder["parent_id"]=null;
+            $result['folder']=$result['folder']=$this->populateFolder();
             $this->load->view('templates/header_list');
             $this->load->view('arsip/arsip_list',$result);
             $this->load->view('templates/footer_list');
@@ -73,13 +73,27 @@ class Arsip extends MY_Controller {
 		$result['tipe_arsip']=$this->TipeArsipModel->getListData('kategori_id','nama');
 		$result['unit_kerja']=$this->OrganisasiModel->getListData('bidang_id','nama');
                 $result['user']=$this->user->getListDataModified('username','nama');
-                $whereFolder["parent_id"]=null;
-                $result['folder']=$this->FolderModel->getListDataModified('folder_id','nama',$whereFolder);
+                $result['folder']=$this->populateFolder();
                 //print_r($result["user"]);
 		$this->load->view('templates/header_list');
 		$this->load->view('arsip/arsip_add', $result);
 		$this->load->view('templates/footer_list');
 	}
+        
+        public function populateFolder() {
+            $param["where"]["parent_id"]=null;
+            $id= $this->session->user["id"];
+            if ($this->session->user["role"]!="Admin" || $this->session->user["role"]!="Superadmin" )
+                $param["where"]["(folder.`pemilik_id`=$id OR vfolder.`viewer_id`=$id)"]=null;
+            $param['select']="folder.folder_id, folder.nama";
+            $data = $this->FolderModel->getAll($param);
+            $return = array();
+            foreach ($data as $row) {
+                $return[$row["folder_id"]] = $row["nama"];
+            }
+            return $return;    
+            
+        }
 
 	public function upload()
 	{

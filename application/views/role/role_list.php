@@ -231,6 +231,7 @@
     function formClear() {
     
         $("#btn-simpan").show();
+        $("#role_id").prop("disabled",false);
         $("#role_id").val("");
         $("#nama").val("");
         $("#keterangan").val("");
@@ -324,6 +325,7 @@
                         $("#" + key).val(value);
                     });
                     $("#kode").val(data.model.role_id);
+                    $("#role_id").prop("disabled",true);
                     $(".fa-spinner").hide();
                     $("#btn-simpan").removeAttr("disabled");
                 } else {
